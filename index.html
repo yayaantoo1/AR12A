@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mobil Listrik + Charging Station (AR.js)</title>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.0.1/aframe/build/aframe-ar.min.js"></script>
+  </head>
+  <body style="margin: 0; overflow: hidden">
+    
+    <a-scene embedded arjs>
+      
+      <!-- Gunakan marker hiro -->
+      <a-marker preset="hiro">
+        
+        <!-- Charging Station -->
+        <a-entity
+          gltf-model="url(pom.glb)" 
+          scale="0.3 0.3 0.3"
+          position="-0.3 0 0"
+        ></a-entity>
+
+        <!-- Mobil Listrik menghadap ke charging station -->
+        <a-entity
+  gltf-model="url(rustie.glb)"
+  scale="0.3 0.3 0.3"
+  position="0.5 0 0"
+  rotation="0 -90 0"
+  animation="property: position; to: 0.2 0 0; dur: 3000; easing: easeInOutSine"
+></a-entity>
+
+
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
