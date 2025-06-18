@@ -1,37 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-  <head>
-    <title>Mobil Listrik + Charging Station (AR.js)</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.0.1/aframe/build/aframe-ar.min.js"></script>
-  </head>
-  <body style="margin: 0; overflow: hidden">
-    
-    <a-scene embedded arjs>
+<head>
+  <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const marker = document.querySelector('a-marker'); 
+      const soundEntity = document.querySelector('a-sound'); 
+      const catModel = document.getElementById('kucing'); 
+      const mouseModel = document.getElementById('tikus'); 
+
+      marker.addEventListener('markerFound', () => { 
+        soundEntity.components.sound.playSound(); 
+      });
+
+      marker.addEventListener('markerLost', () => {
+        soundEntity.components.sound.stopSound();
+      });
+
+      // Otomatis skala agar sesuai ukuran marker (opsional)
+      const markerWidth = 1;
+      const markerHeight = 1;
+
+      catModel.addEventListener('model-loaded', () => {
+        const box = new THREE.Box3().setFromObject(catModel.object3D);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const aspectRatio = size.x / size.y;
+        const scaleX = markerWidth / aspectRatio;
+        const scaleY = markerHeight;
+        catModel.setAttribute('scale', { x: scaleX, y: scaleY, z: scaleX });
+      });
+
+      mouseModel.addEventListener('model-loaded', () => {
+        const box = new THREE.Box3().setFromObject(mouseModel.object3D);
+        const size = new THREE.Vector3();
+        box.getSize(size);
+        const aspectRatio = size.x / size.y;
+        const scaleX = markerWidth / aspectRatio;
+        const scaleY = markerHeight;
+        mouseModel.setAttribute('scale', { x: scaleX, y: scaleY, z: scaleX });
+      });
+    });
+  </script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <a-scene embedded arjs>
+    <a-assets>
+      <a-asset-item id="cat-model" src="trotting/scene.gltf"></a-asset-item> 
+      <a-asset-item id="mouse-model" src="mouse/scene.gltf"></a-asset-item> 
+      <audio id="meow" src="meow.mp3" preload="auto"></audio> 
+    </a-assets>
+
+    <a-marker preset="custom" type="pattern" url="markerpat.patt"> 
       
-      <a-marker preset="hiro">
-        <a-entity id="scene-group" position="0 0 0" >
+      <!-- Tikus -->
+      <a-entity
+        id="tikus"
+        position="0 0 0"
+        scale="0.1 0.1 0.1"
+        gltf-model="#mouse-model"
+        gesture-handler
+      ></a-entity> 
 
-          <!-- Tikus -->
-          <a-entity
-            gltf-model="mouse/scene.gltf"
-            scale="0.3 0.3 0.3"
-            position="0 0 0"
-          ></a-entity>
+      <!-- Kucing -->
+      <a-entity
+        id="kucing"
+        position="0.3 0 0"
+        scale="0.1 0.1 0.1"
+        gltf-model="#cat-model"
+        rotation="0 -90 0"
+        gesture-handler
+        animation="property: position; to: 0.15 0 0; dur: 3000; dir: alternate; loop: true; easing: easeInOutSine"
+      ></a-entity> 
 
-          <!-- Kucing -->
-          <a-entity
-            gltf-model="trotting_cat/scene.gltf"
-            scale="0.3 0.3 0.3"
-            position="0.3 0 0"
-            rotation="0 -90 0"
-            animation="property: position; to: -0.3 0 0; dur: 3000; loop: true; dir: alternate"
-          ></a-entity>
+      <a-sound src="#meow" autoplay="false" loop="true"></a-sound> 
+    </a-marker>
 
-        </a-entity>
-      </a-marker>
-
-      <a-entity camera></a-entity>
-    </a-scene>
-  </body>
+    <a-entity camera></a-entity> 
+  </a-scene>
+</body>
 </html>
