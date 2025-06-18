@@ -9,26 +9,26 @@
     
     <a-scene embedded arjs>
       
-      <!-- Gunakan marker hiro -->
       <a-marker preset="hiro">
-        
-        <!-- Charging Station -->
-        <a-entity
-          gltf-model="url(pom.glb)" 
-          scale="0.3 0.3 0.3"
-          position="-0.3 0 0"
-        ></a-entity>
+        <a-entity id="scene-group" position="0 0 0" >
 
-        <!-- Mobil Listrik menghadap ke charging station -->
-        <a-entity
-  gltf-model="url(rustie.glb)"
-  scale="0.3 0.3 0.3"
-  position="0.5 0 0"
-  rotation="0 -90 0"
-  animation="property: position; to: 0.2 0 0; dur: 3000; easing: easeInOutSine"
-></a-entity>
+          <!-- Tikus -->
+          <a-entity
+            gltf-model="mouse/scene.gltf"
+            scale="0.3 0.3 0.3"
+            position="0 0 0"
+          ></a-entity>
 
+          <!-- Kucing -->
+          <a-entity
+            gltf-model="trotting_cat/scene.gltf"
+            scale="0.3 0.3 0.3"
+            position="0.3 0 0"
+            rotation="0 -90 0"
+            animation="property: position; to: -0.3 0 0; dur: 3000; loop: true; dir: alternate"
+          ></a-entity>
 
+        </a-entity>
       </a-marker>
 
       <a-entity camera></a-entity>
